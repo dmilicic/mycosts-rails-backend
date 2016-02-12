@@ -1,0 +1,18 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Listing Costs</h1>
+
+<ul class="header-list">
+  <li>Category</li>
+  <li>Description</li>
+  <li>Amount</li>
+  <li>Currency</li>
+</ul>
+
+<ul class="cost-list">
+  <%= render @costs %>
+</ul>
+
+<br>
+
+<%= link_to 'New Cost', new_cost_path %>

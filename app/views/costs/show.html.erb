@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Category:</strong>
+  <%= @cost.category %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @cost.description %>
+</p>
+
+<p>
+  <strong>Date:</strong>
+  <%= @cost.date %>
+</p>
+
+<p>
+  <strong>Amount:</strong>
+  <%= @cost.amount %>
+</p>
+
+<p>
+  <strong>Currency:</strong>
+  <%= @cost.currency %>
+</p>
+
+<%= link_to 'Edit', edit_cost_path(@cost) %> |
+<%= link_to 'Back', costs_path %>
