@@ -13,6 +13,7 @@ gem 'uglifier', '>= 1.3.0'
 gem 'bootstrap-generators', '~> 3.3.4'
 
 gem 'puma'
+gem 'redis'
 
 
 # Use jquery as the JavaScript library

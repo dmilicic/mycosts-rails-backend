@@ -3,7 +3,20 @@
 
 jQuery(document).ready(function() {
   var source = new EventSource('/costs/events');
+
+
+
+  source.onopen = function(event) {
+    console.log(event);
+  }
+
+  console.log(source);
+
   source.onmessage = function(event) {
+
+    console.log(event);
+    console.log(event.data);
+
     cost = JSON.parse(event.data)
 
     $.ajax( "/costs/" + cost.id )

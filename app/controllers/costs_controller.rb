@@ -28,16 +28,14 @@ class CostsController < ApplicationController
     response.headers["Content-Type"] = "text/event-stream"
     response.headers["Cache-Control"] = "no-cache"
 
+    redis = Redis.new
+    redis.subscribe('cost.create') do |on|
+      on.message do |event, data|
+        response.stream.write "data: #{data}\n\n"
+      end
+    end
 
-    response.stream.write "data: #{Cost.first.to_json}\n\n"
-
-    start = Time.zone.now
-    # Cost.uncached do
-    #   Cost.where('created_at > ?', start) do |cost|
-    #       response.stream.write "data: #{cost.id}...\n\n"
-    #   end
-    # end
-
+  ensure
     response.stream.close
   end
 
@@ -48,13 +46,15 @@ class CostsController < ApplicationController
 
     respond_to do |format|
       if @cost.save
-        format.html { redirect_to @cost, notice: 'Cost was successfully created.' }
+        format.html { redirect_to action: :index, notice: 'Cost was successfully created.' }
         format.json { render :show, status: :created, location: @cost }
       else
         format.html { render :new }
         format.json { render json: @cost.errors, status: :unprocessable_entity }
       end
     end
+
+    $redis.publish('cost.create', @cost.to_json)
   end
 
   # PATCH/PUT /costs/1
