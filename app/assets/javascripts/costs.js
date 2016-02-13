@@ -2,15 +2,12 @@
 // All this logic will automatically be available in application.js.
 
 jQuery(document).ready(function() {
+
   var source = new EventSource('/costs/events');
 
-
-
   source.onopen = function(event) {
-    console.log(event);
+    console.log(event.type);
   }
-
-  console.log(source);
 
   source.onmessage = function(event) {
 
@@ -24,7 +21,7 @@ jQuery(document).ready(function() {
 
         // append the partial to our list
         cost_view = $.parseHTML(data);
-        $(cost_view).prependTo('.cost-list').hide().slideDown("slow");
+        $(cost_view).prependTo('table').hide().fadeIn();
       });
   }
 });

@@ -1,17 +1,30 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Listing Costs</h1>
+<div class="container">
+  <div class="jumbotron">
+    <h1>Cost Tracker</h1>
+    <p>This page will list all costs in real-time created by users on the Android app. The app and its source code can be found <%= link_to 'here', 'https://github.com/dmilicic/android-clean-sample-app' %>.</p>
+  </div>
+</div>
 
-<ul class="header-list">
-  <li>Category</li>
-  <li>Description</li>
-  <li>Amount</li>
-  <li>Currency</li>
-</ul>
 
-<ul class="cost-list">
-  <%= render @costs %>
-</ul>
+<div class="container">
+    <div class="row col-md-12">
+    <table class="table table-striped custab">
+    <thead>
+        <tr>
+          <th>Date</th>
+          <th>Category</th>
+          <th>Description</th>
+          <th>Amount</th>
+          <th>Currency</th>
+          <th>User</th>
+        </tr>
+    </thead>
+      <%= render @costs %>
+    </table>
+    </div>
+</div>
 
 <br>
 

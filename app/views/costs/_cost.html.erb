@@ -1,10 +1,8 @@
-<li>
-  <%= cost.category %>
-  <%= cost.description %>
-  <%= cost.date %>
-  <%= cost.amount %>
-  <%= cost.currency %>
-  <%= link_to 'Show', cost %>
-  <%= link_to 'Edit', edit_cost_path(cost) %>
-  <%= link_to 'Destroy', cost, method: :delete, data: { confirm: 'Are you sure?' } %>
-</li>
+<tr>
+  <td><%= cost.date %></td>
+  <td><%= cost.category %></td>
+  <td><%= cost.description %></td>
+  <td><%= cost.amount %></td>
+  <td><%= cost.currency %></td>
+  <td>anonymous</td>
+</tr>
