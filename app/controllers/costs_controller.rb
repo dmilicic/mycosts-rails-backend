@@ -42,7 +42,16 @@ class CostsController < ApplicationController
   # POST /costs
   # POST /costs.json
   def create
+    username = params['user'] || "Anonymous"
+
+    user = User.find_by(name: username)
+
+    if user.nil?
+      user = User.create(name: username)
+    end
+
     @cost = Cost.new(cost_params)
+    @cost.user = user
 
     respond_to do |format|
       if @cost.save
