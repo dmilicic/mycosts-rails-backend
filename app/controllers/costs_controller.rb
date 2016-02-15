@@ -1,12 +1,14 @@
 class CostsController < ApplicationController
   include ActionController::Live
 
+  protect_from_forgery except: :create
+
   before_action :set_cost, only: [:show, :edit, :update, :destroy]
 
   # GET /costs
   # GET /costs.json
   def index
-    @costs = Cost.all
+    @costs = Cost.order('date DESC').all
   end
 
   # GET /costs/1
@@ -40,30 +42,42 @@ class CostsController < ApplicationController
   end
 
   # POST /costs
-  # POST /costs.json
   def create
+
+    # filter parameters
+    params = cost_params
+
+    # let's get the user name who sent this requiest
     username = params['user'] || "Anonymous"
 
+    # check if the user exists in the db
     user = User.find_by(name: username)
 
+    # create a new user if it does not exist
     if user.nil?
       user = User.create(name: username)
     end
 
-    @cost = Cost.new(cost_params)
-    @cost.user = user
+    # create new cost items based on received params
+    @costs = params[:costs].collect { |cost_attributes| Cost.new(cost_attributes) }
 
-    respond_to do |format|
-      if @cost.save
-        format.html { redirect_to action: :index, notice: 'Cost was successfully created.' }
-        format.json { render :show, status: :created, location: @cost }
-      else
-        format.html { render :new }
-        format.json { render json: @cost.errors, status: :unprocessable_entity }
+    # save each new cost item to the database and notify over Redis
+    success = true
+    @costs.each do |cost|
+      cost.user = user
+      success = cost.save && success
+
+      if success
+        $redis.publish('cost.create', cost.to_json)
       end
     end
 
-    $redis.publish('cost.create', @cost.to_json)
+    # send the appropriate response codes
+    if success
+      head :ok
+    elsif not success
+      head :bad_request
+    end
   end
 
   # PATCH/PUT /costs/1
@@ -98,6 +112,6 @@ class CostsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def cost_params
-      params.require(:cost).permit(:category, :description, :date, :amount, :currency)
+      params.permit(:user, :costs => [:category, :description, :amount, :date])
     end
 end
