@@ -74,8 +74,8 @@ class CostsController < ApplicationController
 
     # send the appropriate response codes
     if success
-      head :ok
-    elsif not success
+      head :created
+    else
       head :bad_request
     end
   end
