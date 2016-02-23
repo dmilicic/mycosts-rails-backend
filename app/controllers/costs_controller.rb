@@ -8,7 +8,7 @@ class CostsController < ApplicationController
   # GET /costs
   # GET /costs.json
   def index
-    @costs = Cost.order('date DESC').all
+    @costs = Cost.order('created_at DESC').all
   end
 
   # GET /costs/1
